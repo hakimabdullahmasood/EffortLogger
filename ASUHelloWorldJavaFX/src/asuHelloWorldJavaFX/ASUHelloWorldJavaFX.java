@@ -93,7 +93,7 @@ public class ASUHelloWorldJavaFX extends Application {
                 	oldStage.close();
                 	
                 	if(EffortLoggerPermissions.isSupervisor(id))
-                	{
+                	{	//github test
                 		// Create a new stage for the new window
                 		Stage newStage = new Stage();
                 		newStage.setTitle("Supervisor Landing"); // Set the title of the new window
