@@ -46,6 +46,7 @@ public class ASUHelloWorldJavaFX extends Application {
 
         // Create labels for text fields with white text
         Label idLabel = new Label("ID:");
+        
         Label passwordLabel = new Label("Password:");
         idLabel.setTextFill(Color.WHITE);
         passwordLabel.setTextFill(Color.WHITE);
