@@ -345,13 +345,11 @@ public class EffortLoggerDriver extends Application {
 		Stage tasksStage = new Stage();
 		tasksStage.setTitle("Task List");
 
-		// Create a ListView to display tasks (replace String with your actual task
-		// class)
 		ListView<String> taskListView = new ListView<>();
 
-		// Add some dummy tasks for demonstration purposes (replace with your actual
-		// task data)
-		taskListView.getItems().addAll("Task 1", "Task 2", "Task 3");
+		
+	
+		loadTasksFromFile(taskListView);
 
 		// Create a layout for the content
 		VBox tasksLayout = new VBox(10);
@@ -365,6 +363,11 @@ public class EffortLoggerDriver extends Application {
 		if (!tasksLayout.getChildren().contains(viewHistoricalDataBtn)) {
 			tasksLayout.getChildren().addAll(new Label("Task List"), taskListView, viewHistoricalDataBtn);
 		}
+		Button addTaskButton = new Button("Add Task");
+	    addTaskButton.setOnAction(e -> showAddTaskWindow(taskListView));
+	    if (!tasksLayout.getChildren().contains(addTaskButton)) {
+			tasksLayout.getChildren().addAll(addTaskButton);
+		}
 
 		// Create a scene for the task list window
 		Scene tasksScene = new Scene(tasksLayout, 300, 400);
@@ -377,6 +380,41 @@ public class EffortLoggerDriver extends Application {
 		tasksStage.show();
 	}
 
+	private void showAddTaskWindow(ListView<String> taskListView) {
+	    Stage addTaskStage = new Stage();
+	    addTaskStage.setTitle("Add Task");
+
+	    // Create input fields for task details
+	    TextField taskNameField = new TextField();
+	    taskNameField.setPromptText("Enter Task Name");
+
+	    // Create a button to add the new task
+	    Button addButton = new Button("Add Task");
+	    addButton.setOnAction(e -> {
+	        String newTaskName = taskNameField.getText();
+	        if (!newTaskName.isEmpty()) {
+	            String newTaskDisplayName = newTaskName;
+	            taskListView.getItems().add(newTaskDisplayName);
+	            saveNewTaskToFile(newTaskName, newTaskDisplayName);
+	            addTaskStage.close();
+	        }
+	    });
+
+	    // Create a layout for the content
+	    VBox addTaskLayout = new VBox(10);
+	    addTaskLayout.setPadding(new Insets(20));
+	    addTaskLayout.getChildren().addAll(new Label("Add Task"), taskNameField, addButton);
+
+	    // Create a scene for the add task window
+	    Scene addTaskScene = new Scene(addTaskLayout, 300, 150);
+	    addTaskScene.setFill(Color.BLACK);
+
+	    // Set the scene for the add task stage
+	    addTaskStage.setScene(addTaskScene);
+
+	    // Show the add task window
+	    addTaskStage.show();
+	}
 	// Add a method to handle viewing historical data for the selected task
 	private void viewHistoricalData(String selectedTask) {
 		// Implement logic to retrieve historical data for the selected task
@@ -399,7 +437,7 @@ public class EffortLoggerDriver extends Application {
 		historicalDataLayout.getChildren().addAll(new Label("Historical Data"), textArea);
 		Button editHistoricalDataBtn = new Button("Edit Historical Data");
 
-		String fileName = selectedTask.replaceAll("[^a-zA-Z0-9.-]", "_") + "_historical_data.txt";
+		String fileName = selectedTask+ "_historical_data.txt";
 		editHistoricalDataBtn.setOnAction(e -> editHistoricalData(selectedTask, textArea, fileName));
 
 		if (!historicalDataLayout.getChildren().contains(editHistoricalDataBtn)) {
@@ -417,20 +455,13 @@ public class EffortLoggerDriver extends Application {
 		historicalDataStage.show();
 	}
 
-	// Dummy method to get historical data for a task (replace with your actual
-	// logic)
+	// Method to get historical data for a task 
+
 	private String getHistoricalDataForTask(String task) {
-		// Replace this with the actual path to your historical data directory
-		String baseDirectory = System.getProperty("user.dir");
-
-		// Create a subdirectory within the current working directory for historical
-		// data
-		String dataDirectory = baseDirectory;
-
 		System.out.println("Current working directory: " + System.getProperty("user.dir"));
 		// Replace spaces and special characters in the task name to create a valid
 		// filename
-		String fileName = task.replaceAll("[^a-zA-Z0-9.-]", "_") + "_historical_data.txt";
+		String fileName = task + "_historical_data.txt";
 
 		// Build the full path to the historical data file
 		String filePath = "historical_data" + File.separator + fileName;
@@ -459,6 +490,29 @@ public class EffortLoggerDriver extends Application {
 			return "Error: Unable to retrieve or create historical data for " + task;
 		}
 	}
+	
+	private void saveNewTaskToFile(String newTaskName, String newTaskDisplayName) {
+	    try {
+	        String fileName = "tasks.txt";
+	        
+	        // Open the file in append mode
+	        FileWriter writer = new FileWriter(fileName, true);
+
+	        // Write the new task information to the file
+	        
+	        writer.write(newTaskName +"_historical_data.txt"+ "\n");
+
+	        // Close the file
+	        writer.close();
+	        
+	        System.out.println("Saved new task to file: " + fileName);
+	    } catch (IOException e) {
+	        // Handle file-related exceptions
+	        e.printStackTrace();
+	        System.err.println("Error saving new task to file: " + e.getMessage());
+	    }
+	}
+
 
 	// Check if a file exists
 	private boolean fileExists(String filePath) {
@@ -515,11 +569,7 @@ public class EffortLoggerDriver extends Application {
 		try {
 			// Write the edited historical data to the file
 
-			
-
 			String filePath = System.getProperty("user.dir") + File.separator + fileName;
-			
-			
 			
 			FileWriter writer = new FileWriter(fileName);
 			System.out.println(fileExists(filePath));
@@ -532,5 +582,39 @@ public class EffortLoggerDriver extends Application {
 			System.err.println("Error saving edited historical data to file: " + fileName);
 		}
 	}
+	
+	private void loadTasksFromFile(ListView<String> taskListView) {
+	    File currentDirectory = new File(System.getProperty("user.dir"));
+	    File[] files = currentDirectory.listFiles();
+
+	    if (files != null) {
+	        for (File file : files) {
+	            if (file.isFile() && file.getName().endsWith("_historical_data.txt")) {
+	                String fileName = file.getName();
+	                String taskName = getTaskNameFromFileName(fileName); 
+	                if(taskName.equals("false")) {
+	                	System.err.println("Error listing files in the current directory.");
+	                }else {
+	                	 taskListView.getItems().add(taskName);
+	                }
+	            }       
+	        }
+	        System.out.println("Loaded tasks from the current directory.");
+	    } else {
+	        System.err.println("Error listing files in the current directory.");
+	    }
+	}
+
+	private String getTaskNameFromFileName(String fileName) {
+	    // Extract the task number from the file name (assuming the format "Task 1_historical_data.txt")
+	    String[] parts = fileName.split("_");
+	    if (parts.length >= 2) {
+	        String taskName= parts[0];
+	        return taskName;
+	    } else {
+	        return "false";
+	    }
+	}
+
 
 }
