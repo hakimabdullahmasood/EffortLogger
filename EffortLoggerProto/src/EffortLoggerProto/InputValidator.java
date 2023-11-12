@@ -1,17 +1,15 @@
-package asuHelloWorldJavaFX;
+package EffortLoggerProto;
+
 import java.util.*;
 
 public class InputValidator {
-
+	
 	public Object input;
-	public int returnVal; 
-	// 0 - NormalString, 1 - String with Special Characters, 2 - Integer, 3 - Double, 4 - INVALID(Unkown)
+	public int returnVal; // 0 - NormalString, 1 - String with Special Characters, 2 - Integer, 3 - Double, 4 - INVALID(Unkown)
 	// 5 - Number string
 	HashMap<Character, Integer> alphabet = new HashMap<>();
 	HashMap<Character, Integer> SpecialChar = new HashMap<>();
 	HashMap<Character, Integer> Nums = new HashMap<>();
-	
-	
 	public InputValidator(Object input) {
 		this.input = input;
 		returnVal = 20;
@@ -58,7 +56,6 @@ public class InputValidator {
 			else if (charIntegers((String)input)) {
 				
 				this.returnVal = 5; // Number String
-				System.out.print(false);
 			}
 		} else if (input instanceof Integer) {
 			this.returnVal = 2;
@@ -67,7 +64,6 @@ public class InputValidator {
 		} else {
 			this.returnVal = 4; // INVALID (Unknown)
 		}
-		
 		return returnVal;
 	}
 
