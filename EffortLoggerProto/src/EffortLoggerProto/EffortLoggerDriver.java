@@ -56,7 +56,7 @@ public class EffortLoggerDriver extends Application {
 		TextField passwordTextField = new TextField();
 		passwordTextField.setPromptText("Password");
 		passwordTextField
-				.setStyle("-fx-text-fill: white; -fx-control-inner-background: black; -fx-border-color: white;");
+		.setStyle("-fx-text-fill: white; -fx-control-inner-background: black; -fx-border-color: white;");
 
 		// Create labels for text fields with white text
 		Label idLabel = new Label("ID:");
@@ -79,9 +79,9 @@ public class EffortLoggerDriver extends Application {
 		grid.add(passwordLabel, 0, 1);
 		grid.add(passwordTextField, 1, 1);
 		grid.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY))); // Set the
-																												// background
-																												// to
-																												// black
+		// background
+		// to
+		// black
 
 		// Create a layout for centering
 		BorderPane root = new BorderPane();
@@ -108,15 +108,15 @@ public class EffortLoggerDriver extends Application {
 
 				// checks if login user-input is valid
 				if (/*
-					 * EffortLoggerPermissions.isIdValid(id) == true &&
-					 * EffortLoggerPermissions.isPasswordValid(password) == true && iv.checkType(id)
-					 * == 5
-					 */ true) {
+				 * EffortLoggerPermissions.isIdValid(id) == true &&
+				 * EffortLoggerPermissions.isPasswordValid(password) == true && iv.checkType(id)
+				 * == 5
+				 */ true) {
 					// checks if login user-input matches
 					if (/*
-						 * EncryptionModule.fileReadAndValidation(id,
-						 * PasswordValidation.hashPassword(id, password), "credentials.txt") ==
-						 */true) {
+					 * EncryptionModule.fileReadAndValidation(id,
+					 * PasswordValidation.hashPassword(id, password), "credentials.txt") ==
+					 */true) {
 
 						// Close the previous window
 						Stage oldStage = (Stage) loginButton.getScene().getWindow();
@@ -172,7 +172,7 @@ public class EffortLoggerDriver extends Application {
 
 							// Buttons for "Planning Poker", "Edit/View Tasks", and "Logout"
 							Button planningPokerBtn = new Button("Planning Poker");
-							planningPokerBtn.setOnAction(e -> showPlanningPoker());
+							planningPokerBtn.setOnAction(e -> showPlanningPoker() );
 							Button editViewTasksBtn = new Button("Edit/View Tasks");
 							editViewTasksBtn.setOnAction(e -> showTaskListView());
 							Button logoutBtn = new Button("Logout");
@@ -347,25 +347,32 @@ public class EffortLoggerDriver extends Application {
 
 		ListView<String> taskListView = new ListView<>();
 
-		
-	
+
+
 		loadTasksFromFile(taskListView);
 
 		// Create a layout for the content
 		VBox tasksLayout = new VBox(10);
+		tasksLayout.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
 		tasksLayout.setPadding(new Insets(20));
 
 		// Create a button to view historical data for the selected task
 		Button viewHistoricalDataBtn = new Button("View Historical Data");
 		viewHistoricalDataBtn.setOnAction(e -> viewHistoricalData(taskListView.getSelectionModel().getSelectedItem()));
-
+		Label taskList = new Label("Task List");
+		taskList.setTextFill(Color.WHITE);
+		tasksLayout.getChildren().add(taskList);
+		
+	
 		// Add the button and task list to the layout
 		if (!tasksLayout.getChildren().contains(viewHistoricalDataBtn)) {
-			tasksLayout.getChildren().addAll(new Label("Task List"), taskListView, viewHistoricalDataBtn);
+			tasksLayout.getChildren().addAll( taskListView, viewHistoricalDataBtn);
 		}
+		
 		Button addTaskButton = new Button("Add Task");
-	    addTaskButton.setOnAction(e -> showAddTaskWindow(taskListView));
-	    if (!tasksLayout.getChildren().contains(addTaskButton)) {
+		addTaskButton.setOnAction(e -> showAddTaskWindow(taskListView));
+		if (!tasksLayout.getChildren().contains(addTaskButton)) {
 			tasksLayout.getChildren().addAll(addTaskButton);
 		}
 
@@ -381,39 +388,42 @@ public class EffortLoggerDriver extends Application {
 	}
 
 	private void showAddTaskWindow(ListView<String> taskListView) {
-	    Stage addTaskStage = new Stage();
-	    addTaskStage.setTitle("Add Task");
+		Stage addTaskStage = new Stage();
+		addTaskStage.setTitle("Add Task");
 
-	    // Create input fields for task details
-	    TextField taskNameField = new TextField();
-	    taskNameField.setPromptText("Enter Task Name");
+		// Create input fields for task details
+		TextField taskNameField = new TextField();
+		taskNameField.setPromptText("Enter Task Name");
 
-	    // Create a button to add the new task
-	    Button addButton = new Button("Add Task");
-	    addButton.setOnAction(e -> {
-	        String newTaskName = taskNameField.getText();
-	        if (!newTaskName.isEmpty()) {
-	            String newTaskDisplayName = newTaskName;
-	            taskListView.getItems().add(newTaskDisplayName);
-	            saveNewTaskToFile(newTaskName, newTaskDisplayName);
-	            addTaskStage.close();
-	        }
-	    });
+		// Create a button to add the new task
+		Button addButton = new Button("Add Task");
+		addButton.setOnAction(e -> {
+			String newTaskName = taskNameField.getText();
+			if (!newTaskName.isEmpty()) {
+				String newTaskDisplayName = newTaskName;
+				taskListView.getItems().add(newTaskDisplayName);
+				saveNewTaskToFile(newTaskName, newTaskDisplayName);
+				addTaskStage.close();
+			}
+		});
 
-	    // Create a layout for the content
-	    VBox addTaskLayout = new VBox(10);
-	    addTaskLayout.setPadding(new Insets(20));
-	    addTaskLayout.getChildren().addAll(new Label("Add Task"), taskNameField, addButton);
+		// Create a layout for the content
+		VBox addTaskLayout = new VBox(10);
+		addTaskLayout.setPadding(new Insets(20));
+		addTaskLayout.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+		Label AddTask = new Label("Add Task");
+		AddTask.setTextFill(Color.WHITE);
+		addTaskLayout.getChildren().addAll(AddTask, taskNameField, addButton);
 
-	    // Create a scene for the add task window
-	    Scene addTaskScene = new Scene(addTaskLayout, 300, 150);
-	    addTaskScene.setFill(Color.BLACK);
+		// Create a scene for the add task window
+		Scene addTaskScene = new Scene(addTaskLayout, 300, 150);
+		addTaskScene.setFill(Color.BLACK);
 
-	    // Set the scene for the add task stage
-	    addTaskStage.setScene(addTaskScene);
+		// Set the scene for the add task stage
+		addTaskStage.setScene(addTaskScene);
 
-	    // Show the add task window
-	    addTaskStage.show();
+		// Show the add task window
+		addTaskStage.show();
 	}
 	// Add a method to handle viewing historical data for the selected task
 	private void viewHistoricalData(String selectedTask) {
@@ -434,7 +444,9 @@ public class EffortLoggerDriver extends Application {
 		// Create a layout for the content
 		VBox historicalDataLayout = new VBox(10);
 		historicalDataLayout.setPadding(new Insets(20));
-		historicalDataLayout.getChildren().addAll(new Label("Historical Data"), textArea);
+		Label Historical_Data = new Label("Historical Data");
+		Historical_Data.setTextFill(Color.WHITE);
+		historicalDataLayout.getChildren().addAll(Historical_Data, textArea);
 		Button editHistoricalDataBtn = new Button("Edit Historical Data");
 
 		String fileName = selectedTask+ "_historical_data.txt";
@@ -446,6 +458,7 @@ public class EffortLoggerDriver extends Application {
 
 		// Create a scene for the historical data window
 		Scene historicalDataScene = new Scene(historicalDataLayout, 400, 300);
+		historicalDataLayout.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 		historicalDataScene.setFill(Color.BLACK);
 
 		// Set the scene for the historical data stage
@@ -490,27 +503,27 @@ public class EffortLoggerDriver extends Application {
 			return "Error: Unable to retrieve or create historical data for " + task;
 		}
 	}
-	
+
 	private void saveNewTaskToFile(String newTaskName, String newTaskDisplayName) {
-	    try {
-	        String fileName = "tasks.txt";
-	        
-	        // Open the file in append mode
-	        FileWriter writer = new FileWriter(fileName, true);
+		try {
+			String fileName = "tasks.txt";
 
-	        // Write the new task information to the file
-	        
-	        writer.write(newTaskName +"_historical_data.txt"+ "\n");
+			// Open the file in append mode
+			FileWriter writer = new FileWriter(fileName, true);
 
-	        // Close the file
-	        writer.close();
-	        
-	        System.out.println("Saved new task to file: " + fileName);
-	    } catch (IOException e) {
-	        // Handle file-related exceptions
-	        e.printStackTrace();
-	        System.err.println("Error saving new task to file: " + e.getMessage());
-	    }
+			// Write the new task information to the file
+
+			writer.write(newTaskName +"_historical_data.txt"+ "\n");
+
+			// Close the file
+			writer.close();
+
+			System.out.println("Saved new task to file: " + fileName);
+		} catch (IOException e) {
+			// Handle file-related exceptions
+			e.printStackTrace();
+			System.err.println("Error saving new task to file: " + e.getMessage());
+		}
 	}
 
 
@@ -542,7 +555,9 @@ public class EffortLoggerDriver extends Application {
 		// Create a layout for the content
 		VBox editHistoricalDataLayout = new VBox(10);
 		editHistoricalDataLayout.setPadding(new Insets(20));
-		editHistoricalDataLayout.getChildren().addAll(new Label("Edit Historical Data"), editTextArea);
+		Label Edit_Historical_Data = new Label("Edit Historical Data");
+		Edit_Historical_Data.setTextFill(Color.WHITE);
+		editHistoricalDataLayout.getChildren().addAll(Edit_Historical_Data, editTextArea);
 
 		// Create a button to save the edited data
 		Button saveButton = new Button("Save");
@@ -556,6 +571,7 @@ public class EffortLoggerDriver extends Application {
 
 		// Create a scene for the edit historical data window
 		Scene editHistoricalDataScene = new Scene(editHistoricalDataLayout, 1000, 800);
+		editHistoricalDataLayout.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 		editHistoricalDataScene.setFill(Color.BLACK);
 
 		// Set the scene for the edit historical data stage
@@ -570,7 +586,7 @@ public class EffortLoggerDriver extends Application {
 			// Write the edited historical data to the file
 
 			String filePath = System.getProperty("user.dir") + File.separator + fileName;
-			
+
 			FileWriter writer = new FileWriter(fileName);
 			System.out.println(fileExists(filePath));
 			writer.write(editTextArea.getText());
@@ -582,38 +598,38 @@ public class EffortLoggerDriver extends Application {
 			System.err.println("Error saving edited historical data to file: " + fileName);
 		}
 	}
-	
-	private void loadTasksFromFile(ListView<String> taskListView) {
-	    File currentDirectory = new File(System.getProperty("user.dir"));
-	    File[] files = currentDirectory.listFiles();
 
-	    if (files != null) {
-	        for (File file : files) {
-	            if (file.isFile() && file.getName().endsWith("_historical_data.txt")) {
-	                String fileName = file.getName();
-	                String taskName = getTaskNameFromFileName(fileName); 
-	                if(taskName.equals("false")) {
-	                	System.err.println("Error listing files in the current directory.");
-	                }else {
-	                	 taskListView.getItems().add(taskName);
-	                }
-	            }       
-	        }
-	        System.out.println("Loaded tasks from the current directory.");
-	    } else {
-	        System.err.println("Error listing files in the current directory.");
-	    }
+	private void loadTasksFromFile(ListView<String> taskListView) {
+		File currentDirectory = new File(System.getProperty("user.dir"));
+		File[] files = currentDirectory.listFiles();
+
+		if (files != null) {
+			for (File file : files) {
+				if (file.isFile() && file.getName().endsWith("_historical_data.txt")) {
+					String fileName = file.getName();
+					String taskName = getTaskNameFromFileName(fileName); 
+					if(taskName.equals("false")) {
+						System.err.println("Error listing files in the current directory.");
+					}else {
+						taskListView.getItems().add(taskName);
+					}
+				}       
+			}
+			System.out.println("Loaded tasks from the current directory.");
+		} else {
+			System.err.println("Error listing files in the current directory.");
+		}
 	}
 
 	private String getTaskNameFromFileName(String fileName) {
-	    // Extract the task number from the file name (assuming the format "Task 1_historical_data.txt")
-	    String[] parts = fileName.split("_");
-	    if (parts.length >= 2) {
-	        String taskName= parts[0];
-	        return taskName;
-	    } else {
-	        return "false";
-	    }
+		// Extract the task number from the file name (assuming the format "Task 1_historical_data.txt")
+		String[] parts = fileName.split("_");
+		if (parts.length >= 2) {
+			String taskName= parts[0];
+			return taskName;
+		} else {
+			return "false";
+		}
 	}
 
 
