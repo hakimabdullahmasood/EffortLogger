@@ -5,5 +5,4 @@ adas_historical_data.txt
 a_historical_data.txt
 d_historical_data.txt
 asd_historical_data.txt
-balls_historical_data.txt
 1231_historical_data.txt

@@ -162,13 +162,10 @@ public class EffortLoggerDriver extends Application {
 							ComboBox<String> projectDropdown = new ComboBox<>();
 							projectDropdown.setPromptText("Choose Available Project:");
 							projectDropdown.setPrefWidth(200);
-							Label project = new Label();
-							project.setText("Choose Available Project");
-							project.setStyle(
-									"-fx-text-fill: white; -fx-control-inner-background: black; -fx-border-color: white;");
-							ComboBox<String> actionDropdown = new ComboBox<>();
-							actionDropdown.setPromptText("Choose Action:");
-							actionDropdown.setPrefWidth(200);
+						
+							Label actionDropdown = new Label("Choose Action:");
+							actionDropdown.setTextFill(Color.WHITE);
+							
 
 							// Buttons for "Planning Poker", "Edit/View Tasks", and "Logout"
 							Button planningPokerBtn = new Button("Planning Poker");
@@ -177,8 +174,8 @@ public class EffortLoggerDriver extends Application {
 							editViewTasksBtn.setOnAction(e -> showTaskListView());
 							Button logoutBtn = new Button("Logout");
 
-							gridPane.add(project, 0, 0); // Add label to the first column, first row
-							gridPane.add(projectDropdown, 1, 0);
+							// Add DropDown to the first column, first row
+							gridPane.add(projectDropdown, 0, 0);
 
 							// Organizing components using VBox and HBox layouts
 							VBox vbox = new VBox(10); // reduced spacing between elements
@@ -190,8 +187,7 @@ public class EffortLoggerDriver extends Application {
 							// Creating a new BorderPane for this interface
 							BorderPane employeeRoot = new BorderPane();
 							employeeRoot.setCenter(vbox);
-							employeeRoot.setBackground(
-									new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+							employeeRoot.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 							Scene employeeScene = new Scene(employeeRoot, 400, 300);
 							employeeScene.setFill(Color.BLACK);
 
@@ -216,11 +212,15 @@ public class EffortLoggerDriver extends Application {
 				headerLabel.setTextFill(Color.WHITE);
 
 				// Fields for Task Name and Project
-				TextField taskNameField = new TextField();
+				
+			
+				ComboBox<String> taskNameField = new ComboBox<>();
 				taskNameField.setPromptText("[Task Name]");
+				
 				TextField projectField = new TextField();
 				projectField.setPromptText("[Project]");
-
+				
+				loadTasksintoComboBox(taskNameField);
 				// Left side controls
 				Button generateCardBtn = new Button("Generate Card");
 				TextField enterWeightField = new TextField();
@@ -282,7 +282,7 @@ public class EffortLoggerDriver extends Application {
 				generateCardBtn.setOnAction(new EventHandler<ActionEvent>() {
 					// outputs all inputted data to show inputted data is being stored
 					public void handle(ActionEvent event) {
-						String taskN = taskNameField.getText();
+						String taskN = taskNameField.getValue();
 						System.out.println("Task-to-do: " + taskN + "\n");
 						String proj = projectField.getText();
 						System.out.println("Project Name: " + proj + "\n");
@@ -340,7 +340,21 @@ public class EffortLoggerDriver extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
-
+	
+	
+	/*
+	 * ALL CODE BELOW IS PROPERTY OF ABHI
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	
+	
+	
 	private void showTaskListView() {
 		Stage tasksStage = new Stage();
 		tasksStage.setTitle("Task List");
@@ -394,7 +408,7 @@ public class EffortLoggerDriver extends Application {
 		// Create input fields for task details
 		TextField taskNameField = new TextField();
 		taskNameField.setPromptText("Enter Task Name");
-
+		
 		// Create a button to add the new task
 		Button addButton = new Button("Add Task");
 		addButton.setOnAction(e -> {
@@ -602,7 +616,6 @@ public class EffortLoggerDriver extends Application {
 	private void loadTasksFromFile(ListView<String> taskListView) {
 		File currentDirectory = new File(System.getProperty("user.dir"));
 		File[] files = currentDirectory.listFiles();
-
 		if (files != null) {
 			for (File file : files) {
 				if (file.isFile() && file.getName().endsWith("_historical_data.txt")) {
@@ -612,6 +625,26 @@ public class EffortLoggerDriver extends Application {
 						System.err.println("Error listing files in the current directory.");
 					}else {
 						taskListView.getItems().add(taskName);
+					}
+				}       
+			}
+			System.out.println("Loaded tasks from the current directory.");
+		} else {
+			System.err.println("Error listing files in the current directory.");
+		}
+	}
+	private void loadTasksintoComboBox(ComboBox<String> box) {
+		File currentDirectory = new File(System.getProperty("user.dir"));
+		File[] files = currentDirectory.listFiles();
+		if (files != null) {
+			for (File file : files) {
+				if (file.isFile() && file.getName().endsWith("_historical_data.txt")) {
+					String fileName = file.getName();
+					String taskName = getTaskNameFromFileName(fileName); 
+					if(taskName.equals("false")) {
+						System.err.println("Error listing files in the current directory.");
+					}else {
+						box.getItems().add(taskName);
 					}
 				}       
 			}
