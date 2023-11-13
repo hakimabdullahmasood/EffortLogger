@@ -226,6 +226,7 @@ public class EffortLoggerDriver extends Application {
 				TextField enterWeightField = new TextField();
 				enterWeightField.setPromptText("[Enter Weight]");
 				Button sendEstimateBtn = new Button("Send Estimate");
+				sendEstimateBtn.setOnAction(e->Encrypt.encrypt(enterWeightField.getText()));
 				Button backButton = new Button("BACK");
 				VBox leftVBox = new VBox(10);
 				leftVBox.getChildren().addAll(generateCardBtn, enterWeightField, sendEstimateBtn, backButton);
@@ -244,7 +245,9 @@ public class EffortLoggerDriver extends Application {
 				lowField.setPromptText("Low");
 				TextField highField = new TextField();
 				highField.setPromptText("High");
+				
 				VBox rightVBox = new VBox(10);
+				generateCardBtn.setOnAction(e->Encrypt.generate( rangeField, averageField,discardAvgField, lowField, highField));
 				rightVBox.getChildren().addAll(planningCardLabel, rangeField, averageField, discardAvgField, lowField,
 						highField);
 
@@ -256,6 +259,7 @@ public class EffortLoggerDriver extends Application {
 				keyPointLabel2.setPromptText("User Story Key Point");
 				keyPointLabel3.setPromptText("User Story Key Point");
 				VBox bottomVBox = new VBox(10);
+				
 				bottomVBox.getChildren().addAll(keyPointLabel1, keyPointLabel2, keyPointLabel3);
 
 				// Assembling the whole layout
@@ -279,31 +283,7 @@ public class EffortLoggerDriver extends Application {
 				planningStage.setTitle("Planning Poker");
 				planningStage.setScene(planningScene);
 				planningStage.show();
-				generateCardBtn.setOnAction(new EventHandler<ActionEvent>() {
-					// outputs all inputted data to show inputted data is being stored
-					public void handle(ActionEvent event) {
-						String taskN = taskNameField.getValue();
-						System.out.println("Task-to-do: " + taskN + "\n");
-						String proj = projectField.getText();
-						System.out.println("Project Name: " + proj + "\n");
-						String range = rangeField.getText();
-						System.out.println("Range: " + range + "\n");
-						String avg = averageField.getText();
-						System.out.println("Average: " + avg + "\n");
-						String discAvg = discardAvgField.getText();
-						System.out.println("Discard Average: " + discAvg + "\n");
-						String lowF = lowField.getText();
-						System.out.println("Low Card: " + lowF + "\n");
-						String highF = highField.getText();
-						System.out.println("High Card: " + highF + "\n");
-						String kPL1 = keyPointLabel1.getText();
-						System.out.println("User Story Key Point 1: " + kPL1 + "\n");
-						String kPL2 = keyPointLabel2.getText();
-						System.out.println("User Story Key Point 2: " + kPL2 + "\n");
-						String kPL3 = keyPointLabel3.getText();
-						System.out.println("User Story Key Point 3: " + kPL3 + "\n");
-					}
-				});
+				
 			}
 
 		});
